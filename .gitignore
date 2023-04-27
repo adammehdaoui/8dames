@@ -1,0 +1,6 @@
+#Executable
+echiquier
+
+#Object files
+*.o
+
