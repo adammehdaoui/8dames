@@ -10,5 +10,9 @@ echiquier:
 force:
 	make --always-make
 
+run:
+	make --always-make
+	./echiquier
+
 clean: 
 	rm -f *.o echiquier
