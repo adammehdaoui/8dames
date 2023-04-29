@@ -11,22 +11,22 @@
 
 int bit_value_ULI(unsigned long int n, int position){
     unsigned long int tmp = n>>position;
-    return tmp & 1;
+    return tmp & 1UL;
 }
 
 void print_ULI(unsigned long int n){
-    for(int i=(sizeof(unsigned long int)-1) * 8; i>=0; i--){
+    for(int i=sizeof(unsigned long int)*8 - 1; i>=0; i--){
         fprintf(stdout, "%d", bit_value_ULI(n, i));
     }
     fprintf(stdout, "\n");
 }
 
 void set_positive_bit_ULI(unsigned long int *n, int position){
-    *n = (*n)|(1<<position);
+    *n = (*n)|(1UL<<position);
 }
 
 void set_negative_bit_ULI(unsigned long int *n, int position){
-    *n = (*n)&~(1<<position);
+    *n = (*n)&~(1UL<<position);
 }   
 
 void display_board(MLV_Font *font){
@@ -133,9 +133,8 @@ int main(int argc, char *argv[]){
 
             rank = i + j*8;
             fprintf(stdout, "%d\n", rank);
-            set_positive_bit_ULI(&n, 32);
+            set_positive_bit_ULI(&n, 63);
             print_ULI(n);
-            fprintf(stdout, "%ld\n", sizeof(unsigned long int));
 
             MLV_draw_image(img, wx, wy);
         }
