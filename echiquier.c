@@ -14,6 +14,16 @@ int bit_value_ULI(unsigned long int n, int position){
     return tmp & 1UL;
 }
 
+int count_bit_ULI(unsigned long int n){
+    int count = 0;
+    for(int i=sizeof(unsigned long int)*8 - 1; i>=0; i--){
+        if(bit_value_ULI(n, i) == 1){
+            count++;
+        }
+    }
+    return count;
+}
+
 void print_ULI(unsigned long int n){
     for(int i=sizeof(unsigned long int)*8 - 1; i>=0; i--){
         fprintf(stdout, "%d", bit_value_ULI(n, i));
@@ -105,6 +115,10 @@ void display_queens(unsigned long int n, MLV_Image *img){
         }
     }
 
+}
+
+void display_lose(MLV_Font *font){
+    MLV_draw_text_with_font(WINDOW_X/2, WINDOW_Y/2, "You lose !", font, MLV_COLOR_RED, MLV_TEXT_CENTER);
 }
 
 int queen_on_diago(unsigned long int n, int rank){
@@ -217,6 +231,10 @@ int main(int argc, char *argv[]){
 
             if(queen_is_valid(n, rank) == 1){
                 set_positive_bit_ULI(&n, rank);
+            }
+            else{
+                set_positive_bit_ULI(&n, rank);
+                display_lose(font);
             }
 
             display_queens(n, img);
