@@ -108,6 +108,42 @@ void display_queens(unsigned long int n, MLV_Image *img){
 }
 
 int queen_on_diago(unsigned long int n, int rank){
+    int d1, d2, d3, d4;
+
+    d1 = rank-9;
+    d2 = rank-7;
+    d3 = rank+9;
+    d4 = rank+7;
+
+    while(d1>0){
+        if(bit_value_ULI(n, d1) == 1){
+            return 1;
+        }
+        d1-=9;
+    }
+
+    while(d2>0){
+        if(bit_value_ULI(n, d2) == 1){
+            return 1;
+        }
+        d2-=7;
+    }
+
+    while(d3<64){
+        if(bit_value_ULI(n, d3) == 1){
+            return 1;
+        }
+        d3+=9;
+    }
+
+    while(d4<64){
+        if(bit_value_ULI(n, d4) == 1){
+            return 1;
+        }
+        d4+=7;
+    }
+
+    return 0;
 }
 
 int queen_on_line(unsigned long int n, int rank){
@@ -134,6 +170,15 @@ int queen_on_column(unsigned long int n, int rank){
     }
 
     return 0;
+}
+
+int queen_is_valid(unsigned long int n, int rank){
+    if(queen_on_column(n, rank) == 1 || queen_on_line(n, rank) == 1 || queen_on_diago(n, rank) == 1){
+        return 0;
+    }
+    else{
+        return 1;
+    }
 }
 
 int main(int argc, char *argv[]){
@@ -170,7 +215,9 @@ int main(int argc, char *argv[]){
 
             rank = (j*8)+i;
 
-            set_positive_bit_ULI(&n, rank);
+            if(queen_is_valid(n, rank) == 1){
+                set_positive_bit_ULI(&n, rank);
+            }
 
             display_queens(n, img);
         }
