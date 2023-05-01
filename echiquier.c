@@ -93,11 +93,51 @@ void display_board(MLV_Font *font){
     MLV_draw_line((CELL_SIZE)*9 - (CELL_SIZE)/1.5, (CELL_SIZE)*9 - (CELL_SIZE)/1.5, (CELL_SIZE)*9 - (CELL_SIZE)/1.5, 0, MLV_COLOR_BLACK);
 }
 
-void display_pawns(unsigned long int n){
+void display_queens(unsigned long int n, MLV_Image *img){
+    int wx, wy;
+
+    for(int i=sizeof(unsigned long int)*8 - 1; i>=0; i--){
+        if(bit_value_ULI(n, i) == 1){ 
+            wx = (i%8)*CELL_SIZE - 3;
+            wy = (i/8)*CELL_SIZE - 3;
+
+            MLV_draw_image(img, wx, wy);
+        }
+    }
+
+}
+
+int queen_on_diago(unsigned long int n, int rank){
+}
+
+int queen_on_line(unsigned long int n, int rank){
+    int first_rank = (rank/8)*8;
+    int last_rank = first_rank + 7; 
+
+    for(int i=first_rank; i<=last_rank; i++){
+        if(bit_value_ULI(n, i) == 1 && i != rank){
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int queen_on_column(unsigned long int n, int rank){
+    int first_rank = rank%8;
+    int last_rank = first_rank + 56;
+
+    for(int i=first_rank; i<=last_rank; i+=8){
+        if(bit_value_ULI(n, i) == 1 && i != rank){
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 int main(int argc, char *argv[]){
-    unsigned long int n = 0b0;
+    unsigned long int n = 0;
     int x, y, wx, wy, i, j, rank;
     MLV_Image *img;
     MLV_Font *font;
@@ -125,18 +165,14 @@ int main(int argc, char *argv[]){
         MLV_wait_mouse(&x, &y);
 
         if(x<=BOARD_SIZE && y<=BOARD_SIZE){
-            wx = (x/(CELL_SIZE)*(CELL_SIZE)-(CELL_SIZE)/15);
-            wy = (y/(CELL_SIZE)*(CELL_SIZE)-(CELL_SIZE)/15);
-            
             i = (int)x/(CELL_SIZE);
             j = (int)y/(CELL_SIZE);
 
-            rank = i + j*8;
-            fprintf(stdout, "%d\n", rank);
-            set_positive_bit_ULI(&n, 63);
-            print_ULI(n);
+            rank = (j*8)+i;
 
-            MLV_draw_image(img, wx, wy);
+            set_positive_bit_ULI(&n, rank);
+
+            display_queens(n, img);
         }
     }
 

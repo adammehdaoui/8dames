@@ -1,7 +1,7 @@
 all : echiquier
 
 CC=gcc
-CFLAGS=-Wall
+## CFLAGS=-Wall
 LDLIBS=-lMLV -lm -Werror
 
 echiquier:
