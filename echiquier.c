@@ -55,6 +55,7 @@ void display_board(MLV_Font *font){
             else{
                 MLV_draw_filled_rectangle(x, y, CELL_SIZE, CELL_SIZE, MLV_rgba(0, 0, 0, 50));
             }
+
         }
         else{
             if(nbCases%2==0){
@@ -129,28 +130,28 @@ int queen_on_diago(unsigned long int n, int rank){
     d3 = rank+9;
     d4 = rank+7;
 
-    while(d1>0){
+    while(d1%8 != 0 && d1>0){
         if(bit_value_ULI(n, d1) == 1){
             return 1;
         }
         d1-=9;
     }
 
-    while(d2>0){
+    while(d2%8 != 7 && d2>0){
         if(bit_value_ULI(n, d2) == 1){
             return 1;
         }
         d2-=7;
     }
 
-    while(d3<64){
+    while(d3%8 != 7 && d3<64){
         if(bit_value_ULI(n, d3) == 1){
             return 1;
         }
         d3+=9;
     }
 
-    while(d4<64){
+    while(d4%8 != 0 && d4<64){
         if(bit_value_ULI(n, d4) == 1){
             return 1;
         }
@@ -197,7 +198,7 @@ int queen_is_valid(unsigned long int n, int rank){
 
 int main(int argc, char *argv[]){
     unsigned long int n = 0;
-    int x, y, wx, wy, i, j, rank;
+    int x, y, wx, wy, i, j, rank, lastRank;
     MLV_Image *img;
     MLV_Font *font;
 
@@ -229,11 +230,9 @@ int main(int argc, char *argv[]){
 
             rank = (j*8)+i;
 
-            if(queen_is_valid(n, rank) == 1){
-                set_positive_bit_ULI(&n, rank);
-            }
-            else{
-                set_positive_bit_ULI(&n, rank);
+            set_positive_bit_ULI(&n, rank);
+
+            if(queen_is_valid(n, rank) == 0){
                 display_lose(font);
             }
 
