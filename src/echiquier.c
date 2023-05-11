@@ -91,9 +91,11 @@ int game(){
     int end = 0;
     MLV_Image *img;
     MLV_Font *font;
+    MLV_Sound *sound;
 
     MLV_create_window("MEHDAOUI Adam - TP13 - ECHIQUIER", NULL, WINDOW_X, WINDOW_Y);
     img = MLV_load_image("resources/images/queen.png");
+    /*sound = MLV_load_sound("resources/sounds/queen.ogg");*/
 
     if(img == NULL){
         fprintf(stderr, "Erreur lors du chargement de l'image.\n");
@@ -115,6 +117,8 @@ int game(){
         MLV_wait_mouse(&x, &y);
 
         if(x<=BOARD_SIZE && y<=BOARD_SIZE){
+            /*MLV_play_sound(sound, 1.0);*/
+
             i = (int)x/(CELL_SIZE);
             j = (int)y/(CELL_SIZE);
 
