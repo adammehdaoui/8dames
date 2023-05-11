@@ -9,43 +9,37 @@
 #include "../include/utils.h"
 
 int queen_on_diago(unsigned long int n, int rank){
-    int d1, d2, d3, d4;
+    int haut_gauche = rank-9;
+    int haut_droit = rank-7;
+    int bas_gauche = rank+7;
+    int bas_droit = rank+9;
 
-    d1 = rank-9;
-    d2 = rank-7;
-    d3 = rank+9;
-    d4 = rank+7;
-
-    while(d1%8 != 0 && d1>0){
-        if(bit_value_ULI(n, d1) == 1){
-            fprintf(stderr, "1111111111111");
+    while((haut_gauche%8!=0 || haut_gauche == 0) && haut_gauche>=0){
+        if(bit_value_ULI(n, haut_gauche) == 1){
             return 1;
         }
-        d1-=9;
+        haut_gauche-=9;
     }
 
-    while(d2%8 != 0 && d2>0){
-        if(bit_value_ULI(n, d2) == 1){
-            fprintf(stderr, "222222222222");
+    while(haut_droit%8!=0 && haut_droit>=0){
+        if(bit_value_ULI(n, haut_droit) == 1){
             return 1;
         }
-        d2-=7;
+        haut_droit-=7;
     }
 
-    while(d3%8 != 7 && d3<64){
-        if(bit_value_ULI(n, d3) == 1){
-            fprintf(stderr, "33333333333");
+    while(bas_gauche%9!=7 && bas_gauche<64){
+        if(bit_value_ULI(n, bas_gauche) == 1){
             return 1;
         }
-        d3+=9;
+        bas_gauche+=7;
     }
 
-    while(d4%8 != 7 && d4<64){
-        if(bit_value_ULI(n, d4) == 1){
-            fprintf(stderr, "44444444444");
+    while(bas_droit%9!=7 && bas_droit<64){
+        if(bit_value_ULI(n, bas_droit) == 1){
             return 1;
         }
-        d4+=7;
+        bas_droit+=9;
     }
 
     return 0;
