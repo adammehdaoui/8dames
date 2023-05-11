@@ -108,7 +108,7 @@ void display_queens(unsigned long int n, MLV_Image *img){
     int wx, wy;
 
     for(int i=sizeof(unsigned long int)*8 - 1; i>=0; i--){
-        if(bit_value_ULI(n, i) == 1){ 
+        if(bit_value_ULI(n, i)){ 
             wx = (i%8)*CELL_SIZE - 3;
             wy = (i/8)*CELL_SIZE - 3;
 
@@ -119,7 +119,13 @@ void display_queens(unsigned long int n, MLV_Image *img){
 }
 
 void display_lose(MLV_Font *font){
-    MLV_draw_text_with_font(WINDOW_X/2, WINDOW_Y/2, "You lose !", font, MLV_COLOR_RED, MLV_TEXT_CENTER);
+    MLV_draw_rectangle(WINDOW_X/2, WINDOW_Y/2, WINDOW_X/8 + 15, CELL_SIZE/2 - 10, MLV_COLOR_BLACK);
+    MLV_draw_text_with_font(WINDOW_X/2, WINDOW_Y/2, " Annuler le coup ", font, MLV_COLOR_BLACK, MLV_TEXT_CENTER);
+    MLV_draw_text_with_font(WINDOW_X/2, WINDOW_Y/2 - CELL_SIZE, "Dommage ! Toutes les cases sont attaquées.", font, MLV_COLOR_RED, MLV_TEXT_CENTER);
+}
+
+void clear_lose(){
+    
 }
 
 int queen_on_diago(unsigned long int n, int rank){
@@ -176,7 +182,7 @@ int queen_on_line(unsigned long int n, int rank){
 
 int queen_on_column(unsigned long int n, int rank){
     int first_rank = rank%8;
-    int last_rank = first_rank + 56;
+    int last_rank = first_rank+56;
 
     for(int i=first_rank; i<=last_rank; i+=8){
         if(bit_value_ULI(n, i) == 1 && i != rank){
@@ -198,7 +204,9 @@ int queen_is_valid(unsigned long int n, int rank){
 
 int main(int argc, char *argv[]){
     unsigned long int n = 0;
-    int x, y, wx, wy, i, j, rank, lastRank;
+    int x, y, wx, wy, i, j, rank;
+    int lastRank = -1;
+    int lose = 0;
     MLV_Image *img;
     MLV_Font *font;
 
@@ -232,15 +240,28 @@ int main(int argc, char *argv[]){
 
             set_positive_bit_ULI(&n, rank);
 
-            if(queen_is_valid(n, rank) == 0){
-                display_lose(font);
-            }
-
             display_queens(n, img);
+
+            if(queen_is_valid(n, rank) == 0){
+
+                display_lose(font);
+
+                MLV_actualise_window();
+
+                while(lose == 1){
+                    MLV_wait_mouse(&x, &y);
+
+                    if(x>WINDOW_X/2 && x<(WINDOW_X/2)+(WINDOW_X/8 + 15) && y>(WINDOW_Y/2) && y<(WINDOW_Y/2)+(CELL_SIZE/2) - 10) {
+                        set_negative_bit_ULI(&n, rank);
+                        lose = 0;
+                    }
+                }
+            }
         }
     }
 
+    MLV_free_font(font);
     MLV_free_window();
 
-    return 0;
+    return EXIT_SUCCESS;
 }
