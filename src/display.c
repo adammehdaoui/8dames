@@ -91,9 +91,13 @@ void display_queen(int rank, MLV_Image *img){
 }
 
 void display_lose(MLV_Font *font){
+    MLV_draw_text_with_font(WINDOW_X/2, WINDOW_Y/2 - CELL_SIZE + 25, " Vous avez perdu (toutes les cases sont attaquées). ", font, MLV_COLOR_RED, MLV_TEXT_CENTER);
+}
+
+void display_rollback(MLV_Font *font){
     MLV_draw_rectangle(WINDOW_X/2, WINDOW_Y/2, WINDOW_X/8 + 15, CELL_SIZE/2 - 10, MLV_COLOR_BLACK);
     MLV_draw_text_with_font(WINDOW_X/2, WINDOW_Y/2, " Annuler le coup ", font, MLV_COLOR_BLACK, MLV_TEXT_CENTER);
-    MLV_draw_text_with_font(WINDOW_X/2, WINDOW_Y/2 - CELL_SIZE, " Dommage ! Toutes les cases sont attaquées. ", font, MLV_COLOR_RED, MLV_TEXT_CENTER);
+    MLV_draw_text_with_font(WINDOW_X/2, WINDOW_Y/2 - CELL_SIZE, " Vous n'aviez pas le droit de faire ce coup ", font, MLV_COLOR_RED, MLV_TEXT_CENTER);
 }
 
 void display_win(MLV_Font *font){

@@ -11,6 +11,7 @@ void display_board(MLV_Font *font);
 void display_queens(unsigned long int n, MLV_Image *img);
 void display_queen(int rank, MLV_Image *img);
 void display_lose(MLV_Font *font);
+void display_rollback(MLV_Font *font);
 void display_win(MLV_Font *font);
 void clear_lose(int position, int x, int y);
 
