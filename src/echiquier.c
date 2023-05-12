@@ -73,15 +73,18 @@ int queen_on_column(unsigned long int n, int rank){
 
 int queen_is_valid(unsigned long int n, int rank){
     if(queen_on_column(n, rank) == 1 || queen_on_line(n, rank) == 1 || queen_on_diago(n, rank) == 1){
-        fprintf(stdout, "La reine en %d est en echec.\n", rank);
-        fprintf(stderr, queen_on_column(n, rank) == 1 ? "La reine est en echec sur sa colonne.\n" : "");
-        fprintf(stderr, queen_on_line(n, rank) == 1 ? "La reine est en echec sur sa ligne.\n" : "");
-        fprintf(stderr, queen_on_diago(n, rank) == 1 ? "La reine est en echec sur sa diagonale.\n" : "");
         return 0;
     }
     else{
         return 1;
     }
+}
+
+int game_over(unsigned long int n, int rank){
+    for(int i=sizeof(unsigned long int)*8 - 1; i>=0; i--){
+    }
+
+    return 0;
 }
 
 int game(){
@@ -91,11 +94,12 @@ int game(){
     int end = 0;
     MLV_Image *img;
     MLV_Font *font;
-    MLV_Sound *sound;
+    MLV_Music *sound;
 
     MLV_create_window("MEHDAOUI Adam - TP13 - ECHIQUIER", NULL, WINDOW_X, WINDOW_Y);
+    MLV_init_audio();
     img = MLV_load_image("resources/images/queen.png");
-    /*sound = MLV_load_sound("resources/sounds/queen.ogg");*/
+    sound = MLV_load_music("resources/sounds/queen.mp3");
 
     if(img == NULL){
         fprintf(stderr, "Erreur lors du chargement de l'image.\n");
@@ -117,7 +121,7 @@ int game(){
         MLV_wait_mouse(&x, &y);
 
         if(x<=BOARD_SIZE && y<=BOARD_SIZE){
-            /*MLV_play_sound(sound, 1.0);*/
+            MLV_play_music(sound, 5.0, 1);
 
             i = (int)x/(CELL_SIZE);
             j = (int)y/(CELL_SIZE);
@@ -128,7 +132,7 @@ int game(){
 
             display_queens(n, img);
 
-            if(queen_is_valid(n, rank) == 0){
+            if(game_over(n) == 1){
                 lose = 1;
                 lastX = x;
                 lastY = y;

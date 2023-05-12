@@ -79,7 +79,6 @@ void display_queens(unsigned long int n, MLV_Image *img){
             MLV_draw_image(img, wx, wy);
         }
     }
-
 }
 
 void display_lose(MLV_Font *font){
