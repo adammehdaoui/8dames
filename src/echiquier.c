@@ -8,6 +8,57 @@
 #include "../include/display.h"
 #include "../include/utils.h"
 
+void set_on_diago(unsigned long int *n, int rank){
+    int haut_gauche = rank-9;
+    int haut_droit = rank-7;
+    int bas_gauche = rank+7;
+    int bas_droit = rank+9;
+
+    while((haut_gauche%8!=0 || haut_gauche == 0) && haut_gauche>=0){
+        set_positive_bit_ULI(n, haut_gauche);
+        haut_gauche-=9;
+    }
+
+    while(haut_droit%8!=0 && haut_droit>=0){
+        set_positive_bit_ULI(n, haut_droit);
+        haut_droit-=7;
+    }
+
+    while(bas_gauche%9!=7 && bas_gauche<64){
+        set_positive_bit_ULI(n, bas_gauche);
+        bas_gauche+=7;
+    }
+
+    while(bas_droit%9!=7 && bas_droit<64){
+        set_positive_bit_ULI(n, bas_droit);
+        bas_droit+=9;
+    }
+}
+
+void set_on_line(unsigned long int *n, int rank){
+    int first_rank = (rank/8)*8;
+    int last_rank = first_rank + 7; 
+
+    for(int i=first_rank; i<=last_rank; i++){
+        set_positive_bit_ULI(n ,i);
+    }
+}
+
+void set_on_column(unsigned long int *n, int rank){
+    int first_rank = rank%8;
+    int last_rank = first_rank+56;
+
+    for(int i=first_rank; i<=last_rank; i+=8){
+        set_positive_bit_ULI(n, i);
+    }
+}
+
+void set_menace(unsigned long int *n, int rank){
+    set_on_diago(n, rank);
+    set_on_line(n, rank);
+    set_on_column(n, rank);
+}
+
 int queen_on_diago(unsigned long int n, int rank){
     int haut_gauche = rank-9;
     int haut_droit = rank-7;
@@ -80,8 +131,9 @@ int queen_is_valid(unsigned long int n, int rank){
     }
 }
 
-int game_over(unsigned long int n, int rank){
-    for(int i=sizeof(unsigned long int)*8 - 1; i>=0; i--){
+int game_over(unsigned long int n){
+    if(count_bit_ULI(n) == 64){
+        return 1;
     }
 
     return 0;
@@ -92,6 +144,7 @@ int game(){
     int x, y, lastX, lastY, i, j, rank;
     int lose = 0;
     int end = 0;
+    int queens_on_board;
     MLV_Image *img;
     MLV_Font *font;
     MLV_Music *sound;
@@ -128,11 +181,9 @@ int game(){
 
             rank = (j*8)+i;
 
-            set_positive_bit_ULI(&n, rank);
+            display_queen(rank, img);
 
-            display_queens(n, img);
-
-            if(game_over(n) == 1){
+            if(game_over(n) || bit_value_ULI(n, rank) == 1){
                 lose = 1;
                 lastX = x;
                 lastY = y;
@@ -144,13 +195,18 @@ int game(){
 
                     if(x>WINDOW_X/2 && x<(WINDOW_X/2)+(WINDOW_X/8 + 15) && y>(WINDOW_Y/2) && y<(WINDOW_Y/2)+(CELL_SIZE/2) - 10) {
                         clear_lose(rank, lastX, lastY);
-                        set_negative_bit_ULI(&n, rank);
                         lose = 0;
                     }
                 }
             }
+
+            set_positive_bit_ULI(&n, rank);
+
+            queens_on_board++;
+
+            set_menace(&n, rank);
         
-            if(count_bit_ULI(n) == 8){
+            if(queens_on_board == 8){
                 display_win(font);
                 end = 1;
                 MLV_actualise_window();
@@ -160,7 +216,9 @@ int game(){
         }
     }
 
+    MLV_free_music(sound);
     MLV_free_font(font);
+    MLV_free_image(img);
     MLV_free_window();
 
     return 0;

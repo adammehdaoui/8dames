@@ -81,6 +81,15 @@ void display_queens(unsigned long int n, MLV_Image *img){
     }
 }
 
+void display_queen(int rank, MLV_Image *img){
+    int wx, wy;
+
+    wx = (rank%8)*CELL_SIZE - 3;
+    wy = (rank/8)*CELL_SIZE - 3;
+
+    MLV_draw_image(img, wx, wy);
+}
+
 void display_lose(MLV_Font *font){
     MLV_draw_rectangle(WINDOW_X/2, WINDOW_Y/2, WINDOW_X/8 + 15, CELL_SIZE/2 - 10, MLV_COLOR_BLACK);
     MLV_draw_text_with_font(WINDOW_X/2, WINDOW_Y/2, " Annuler le coup ", font, MLV_COLOR_BLACK, MLV_TEXT_CENTER);
