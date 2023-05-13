@@ -80,6 +80,7 @@ void set_on_column(unsigned long int *n, int rank){
     }
 }
 
+/*Ajoute toutes les menaces que peut représenter une reine sur l'échiquier*/
 void set_menace(unsigned long int *n, int rank){
     set_positive_bit_ULI(n, rank);
     set_on_diago(n, rank);
@@ -168,6 +169,7 @@ int game_over(unsigned long int n){
 }
 
 int game(){
+    /*Initialisation de tous les paramètres*/
     unsigned long int n = 0;
     int x, y, lastX, lastY, i, j, rank;
     int lose = 0;
@@ -197,6 +199,7 @@ int game(){
     MLV_clear_window(MLV_COLOR_WHITE);
     display_board(font);
 
+    /*Boucle principale du jeu*/
     while(!end){
         MLV_actualise_window();
         MLV_wait_mouse(&x, &y);
@@ -234,22 +237,21 @@ int game(){
 
                 set_menace(&n, rank);
         
+                /*Traitement du cas ou le joueur a gagné*/
                 if(queens_on_board == 8){
                     display_win(font);
                     end = 1;
                     MLV_actualise_window();
                     sleep(5);
                 }
-
-                if(game_over(n) == 1){
+                /*Traitement du cas ou le joueur a perdu*/
+                else if(game_over(n) == 1){
                     display_lose(font);
                     end = 1;
                     MLV_actualise_window();
                     sleep(5);
                 }
             }
-
-            print_ULI(n);
         }
     }
 
