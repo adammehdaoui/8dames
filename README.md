@@ -1,4 +1,4 @@
-# TP sur le problème problème des 8 dames avec utilisation d'opérations bit à bit
+# TP sur le problème des 8 dames avec utilisation d'opérations bit à bit
 
 ## Jouer au jeu
 
