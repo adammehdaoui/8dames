@@ -172,6 +172,7 @@ int game(){
     /*Initialisation de tous les paramètres*/
     unsigned long int n = 0;
     int x, y, lastX, lastY, i, j, rank;
+    int lastRank = -1;
     int lose = 0;
     int end = 0;
     int queens_on_board;
@@ -214,7 +215,7 @@ int game(){
 
             display_queen(rank, img);
 
-            if(bit_value_ULI(n, rank) == 1){
+            if(bit_value_ULI(n, rank) == 1 && rank != lastRank){
                 lose = 1;
                 lastX = x;
                 lastY = y;
@@ -230,8 +231,12 @@ int game(){
                     }
                 }
             }
-            else{
+            else if(rank != lastRank){
                 set_positive_bit_ULI(&n, rank);
+
+                fprintf(stderr, "rank = %d, last rank = %d\n", rank, lastRank);
+
+                lastRank = rank;
 
                 queens_on_board++;
 
